@@ -6,10 +6,12 @@ public class Character : MonoBehaviour, IDamagable
     [SerializeField] private float _moveSpeed;
     [SerializeField] private float _rotationSpeed;
 
+    private float InjuryKoef = 0.3f;
+
     private IMovementInput _input;
     private IMovable _mover;
     private IRotatable _rotator;
-    private float _health;
+    [SerializeField] private float _health;
     private bool _isHit;
 
     public CharacterStates State { get; private set; }
@@ -36,6 +38,8 @@ public class Character : MonoBehaviour, IDamagable
 
         private set { _health = value >= 0 ? value : 0; }
     }
+
+    public bool IsInjury => Health < _maxHealth * InjuryKoef;
 
     private void Awake()
     {

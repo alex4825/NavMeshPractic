@@ -272,12 +272,18 @@ AnimatorController:
       m_State: {fileID: 0}
       m_Motion: {fileID: 1827226128182048838, guid: 5940bb0b55717a746bbbe4d3e47e7e39,
         type: 3}
+    - serializedVersion: 2
+      m_State: {fileID: -6753896040091159701}
+      m_Motion: {fileID: 7400000, guid: dd740ac8ca4532a4284275173da2f971, type: 2}
+    - serializedVersion: 2
+      m_State: {fileID: 5165949095877302777}
+      m_Motion: {fileID: 7400000, guid: d17de6afb6a33354f823beaa64d1cd8e, type: 2}
     m_Behaviours: []
     m_BlendingMode: 0
     m_SyncedLayerIndex: 0
     m_DefaultWeight: 0
     m_IKPass: 0
-    m_SyncedLayerAffectsTiming: 0
+    m_SyncedLayerAffectsTiming: 1
     m_Controller: {fileID: 9100000}
 --- !u!1102 &1444597466737278139
 AnimatorState:
