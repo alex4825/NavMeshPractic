@@ -45,7 +45,7 @@ public class CharacterVisual : MonoBehaviour
         int injuryIndex = _animator.GetLayerIndex(InjuryLayerName);
         float currentWeight = _animator.GetLayerWeight(injuryIndex);
 
-        _animator.SetLayerWeight(injuryIndex, Mathf.Lerp(currentWeight, value, step));
+        _animator.SetLayerWeight(injuryIndex, Mathf.Lerp(currentWeight, value, step)) ;
     }
 
     private void SetAnimationFrom(CharacterStates state)
