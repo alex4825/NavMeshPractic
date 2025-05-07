@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.EventSystems;
 
 public class Character : MonoBehaviour, IDamagable
@@ -40,27 +41,32 @@ public class Character : MonoBehaviour, IDamagable
         private set { _health = value >= 0 ? value : 0; }
     }
 
-    public bool IsInitiated { get; private set; }
+    public bool IsReadyToGo { get; private set; }
 
     public bool IsStrongInjury => Health < _maxHealth * InjuryKoef;
 
     public void Initiate()
     {
-        _mover = new WASDCharacterControllerMover(GetComponent<CharacterController>(), _moveSpeed);
+        _mover = new ClickPointAgentMover(GetComponent<NavMeshAgent>(), _moveSpeed);
         _rotator = new DirectionalRotator(transform, _rotationSpeed);
 
         Health = _maxHealth;
         State = CharacterStates.Idle;
 
-        IsInitiated = true;
+        IsReadyToGo = true;
     }
 
     public void Update()
     {
-        if (IsInitiated)
+        if (IsReadyToGo)
         {
             _mover.UpdateMovement();
             _rotator.UpdateRotation(_mover.Velocity);
+
+            if (_mover.Velocity == Vector3.zero)
+                State = CharacterStates.Idle;
+            else
+                State = CharacterStates.Running;
         }
     }
 

@@ -1,29 +1,25 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class ClickPointAgentController : Controller
+public class ClickPointAgentMover : IMovable
 {
     private NavMeshAgent _agent;
-    private IMovable _movable;
-    private IRotatable _rotatable;
+    private float _moveSpeed;
 
-    public ClickPointAgentController(NavMeshAgent agent, IMovable movable, IRotatable rotatable)
+    public ClickPointAgentMover(NavMeshAgent agent, float moveSpeed)
     {
         _agent = agent;
-        _movable = movable;
-        _rotatable = rotatable;
+        _moveSpeed = moveSpeed;
+        _agent.speed = _moveSpeed;
+        _agent.updateRotation = false;
     }
 
-    protected override void UpdateLogic()
+    public Vector3 Velocity => _agent.desiredVelocity;
+
+    public void UpdateMovement()
     {
         if (TryGetClickPosition(out Vector3 clickPosition))
-        {
             _agent.SetDestination(clickPosition);
-        }
-
-
     }
 
     private bool TryGetClickPosition(out Vector3 clickPosition)
