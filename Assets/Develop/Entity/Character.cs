@@ -1,16 +1,17 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class Character : MonoBehaviour, IDamagable
+public class Character : MonoBehaviour, IDamagable, IDirectionalMovable, IDirectionalRotatable
 {
     [SerializeField] private float _maxHealth;
     [SerializeField] private float _moveSpeed;
     [SerializeField] private float _rotationSpeed;
 
-    private float InjuryKoef = 0.3f;
+    private const float InjuryKoef = 0.3f;
 
-    private IMovementInput _input;
-    private IMovable _mover;
-    private IRotatable _rotator;
+    private DirectionalMover _mover;
+    private DirectionalRotator _rotator;
+
     [SerializeField] private float _health;
     private bool _isHit;
 
@@ -39,32 +40,31 @@ public class Character : MonoBehaviour, IDamagable
         private set { _health = value >= 0 ? value : 0; }
     }
 
-    public bool IsInjury => Health < _maxHealth * InjuryKoef;
+    public bool IsInitiated { get; private set; }
 
-    private void Awake()
+    public bool IsStrongInjury => Health < _maxHealth * InjuryKoef;
+
+    public Vector3 CurrentVelocity => _mover.CurrentVelocity;
+
+    public Quaternion CurrentRotation => _rotator.CurrentRotation;
+
+    public void Initiate()
     {
-        _input = new CameraForwardWASDInput();
-        _mover = new CharacterControllerMover(GetComponent<CharacterController>(), _moveSpeed);
-        _rotator = new TransformRotator(transform, _rotationSpeed);
+        _mover = new DirectionalMover(GetComponent<CharacterController>(), _moveSpeed);
+        _rotator = new DirectionalRotator(transform, _rotationSpeed);
 
         Health = _maxHealth;
         State = CharacterStates.Idle;
+
+        IsInitiated = true;
     }
 
     public void Update()
     {
-        Vector3 moveDirection = _input.GetMoveDirection();
-
-        if (moveDirection == Vector3.zero)
+        if (IsInitiated)
         {
-            State = CharacterStates.Idle;
-        }
-        else
-        {
-            State = CharacterStates.Running;
-
-            _mover.UpdateMovement(moveDirection);
-            _rotator.UpdateRotation(moveDirection);
+            _mover.UpdateMovement();
+            _rotator.UpdateRotation();
         }
     }
 
@@ -73,4 +73,8 @@ public class Character : MonoBehaviour, IDamagable
         IsHit = true;
         _health -= damage;
     }
+
+    public void SetMoveDirection(Vector3 inputDirection) => _mover.SetDirection(inputDirection);
+
+    public void SetRotationDirection(Vector3 inputDirection) => _rotator.SetDirection(inputDirection);
 }

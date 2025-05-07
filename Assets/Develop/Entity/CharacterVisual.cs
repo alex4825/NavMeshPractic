@@ -31,7 +31,7 @@ public class CharacterVisual : MonoBehaviour
         if (_character.IsHit)
             _animator.SetTrigger(HitKey);
 
-        if (_character.IsInjury)
+        if (_character.IsStrongInjury)
             SetInjuryWeight(MaxInjuryWeight);
         else
             SetInjuryWeight(0);
