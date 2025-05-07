@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 public class PlayExample : MonoBehaviour
 {
@@ -9,5 +10,8 @@ public class PlayExample : MonoBehaviour
     private void Awake()
     {
         _character.Initiate();
+        //_characterController = new ClickPointAgentController(_character.GetComponent<NavMeshAgent>());
+
+        //_characterController.Enable();
     }
 }

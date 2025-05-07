@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class Character : MonoBehaviour, IDamagable, IDirectionalMovable, IDirectionalRotatable
+public class Character : MonoBehaviour, IDamagable
 {
     [SerializeField] private float _maxHealth;
     [SerializeField] private float _moveSpeed;
@@ -9,8 +9,8 @@ public class Character : MonoBehaviour, IDamagable, IDirectionalMovable, IDirect
 
     private const float InjuryKoef = 0.3f;
 
-    private DirectionalMover _mover;
-    private DirectionalRotator _rotator;
+    private IMovable _mover;
+    private IRotatable _rotator;
 
     [SerializeField] private float _health;
     private bool _isHit;
@@ -44,13 +44,9 @@ public class Character : MonoBehaviour, IDamagable, IDirectionalMovable, IDirect
 
     public bool IsStrongInjury => Health < _maxHealth * InjuryKoef;
 
-    public Vector3 CurrentVelocity => _mover.CurrentVelocity;
-
-    public Quaternion CurrentRotation => _rotator.CurrentRotation;
-
     public void Initiate()
     {
-        _mover = new DirectionalMover(GetComponent<CharacterController>(), _moveSpeed);
+        _mover = new WASDCharacterControllerMover(GetComponent<CharacterController>(), _moveSpeed);
         _rotator = new DirectionalRotator(transform, _rotationSpeed);
 
         Health = _maxHealth;
@@ -64,7 +60,7 @@ public class Character : MonoBehaviour, IDamagable, IDirectionalMovable, IDirect
         if (IsInitiated)
         {
             _mover.UpdateMovement();
-            _rotator.UpdateRotation();
+            _rotator.UpdateRotation(_mover.Velocity);
         }
     }
 
@@ -73,8 +69,4 @@ public class Character : MonoBehaviour, IDamagable, IDirectionalMovable, IDirect
         IsHit = true;
         _health -= damage;
     }
-
-    public void SetMoveDirection(Vector3 inputDirection) => _mover.SetDirection(inputDirection);
-
-    public void SetRotationDirection(Vector3 inputDirection) => _rotator.SetDirection(inputDirection);
 }
