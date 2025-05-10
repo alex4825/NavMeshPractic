@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class CharacterVisual : MonoBehaviour
+public class CharacterAnimator : MonoBehaviour
 {
     [SerializeField] private Animator _animator;
     [SerializeField] private Character _character;
@@ -28,14 +28,13 @@ public class CharacterVisual : MonoBehaviour
 
         UpdateLastFrameState();
 
-        if (_character.IsHit)
-            _animator.SetTrigger(HitKey);
-
         if (_character.IsStrongInjury)
             SetInjuryWeight(MaxInjuryWeight);
         else
             SetInjuryWeight(0);
     }
+
+    public void AnimateHit() => _animator.SetTrigger(HitKey);
 
     private void UpdateLastFrameState() => _characterLastFrameState = _character.State;
 

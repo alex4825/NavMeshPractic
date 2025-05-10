@@ -1,16 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Hit : MonoBehaviour
 {
-    [SerializeField] private Animator _animator;
+    [SerializeField] private Character _character;
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.F)) 
         {
-            _animator.SetTrigger("Hit");
+            _character.TakeDamage(10);
         }
     }
 }
