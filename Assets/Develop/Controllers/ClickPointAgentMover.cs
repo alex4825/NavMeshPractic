@@ -5,12 +5,15 @@ public class ClickPointAgentMover : IMovable
 {
     private NavMeshAgent _agent;
     private float _moveSpeed;
+    private LayerMask _groundMask;
 
-    public ClickPointAgentMover(NavMeshAgent agent, float moveSpeed)
+    public ClickPointAgentMover(NavMeshAgent agent, float moveSpeed, LayerMask groundMask)
     {
         _agent = agent;
         _moveSpeed = moveSpeed;
         _agent.speed = _moveSpeed;
+        _groundMask = groundMask;
+
         _agent.updateRotation = false;
     }
 
@@ -28,7 +31,7 @@ public class ClickPointAgentMover : IMovable
         {
             Ray cursorRay = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-            if (Physics.Raycast(cursorRay, out RaycastHit hit, Mathf.Infinity))
+            if (Physics.Raycast(cursorRay, out RaycastHit hit, Mathf.Infinity, _groundMask))
             {
                 clickPosition = hit.point;
                 return true;

@@ -5,13 +5,14 @@ public class Character : MonoBehaviour, IDamagable
 {
     [SerializeField] private float _moveSpeed;
     [SerializeField] private float _rotationSpeed;
+    [SerializeField] private LayerMask _groundMask;
 
     private const float InjuryKoef = 0.3f;
 
     private IMovable _mover;
     private IRotatable _rotator;
 
-    [SerializeField] private float _health;
+    private float _health;
 
     [field: SerializeField]
     public float MaxHealth { get; private set; }
@@ -29,9 +30,11 @@ public class Character : MonoBehaviour, IDamagable
 
     public bool IsStrongInjury => Health < MaxHealth * InjuryKoef;
 
+    public Vector3 Position => transform.position;
+
     public void Initiate()
     {
-        _mover = new ClickPointAgentMover(GetComponent<NavMeshAgent>(), _moveSpeed);
+        _mover = new ClickPointAgentMover(GetComponent<NavMeshAgent>(), _moveSpeed, _groundMask);
         _rotator = new DirectionalRotator(transform, _rotationSpeed);
 
         Health = MaxHealth;

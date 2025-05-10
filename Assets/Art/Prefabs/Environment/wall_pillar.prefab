@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3046462772904603333}
   - component: {fileID: 4090375922576357890}
   - component: {fileID: -680967503676013964}
+  - component: {fileID: 5186532027245002503}
   m_Layer: 0
   m_Name: wall_pillar
   m_TagString: Untagged
@@ -105,3 +106,22 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 4, y: 4, z: 1.5000006}
   m_Center: {x: 0, y: 1.9999999, z: -0.00000035762787}
+--- !u!114 &5186532027245002503
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2372243119839352088}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_OverrideArea: 1
+  m_Area: 1
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff

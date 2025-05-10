@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public interface IDamagable
 {
     float MaxHealth { get; }
@@ -5,6 +7,8 @@ public interface IDamagable
     float Health { get; }
 
     bool IsHit { get; }
+
+    Vector3 Position { get; }
 
     void TakeDamage(float damage);
 }
