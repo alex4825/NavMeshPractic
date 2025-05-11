@@ -8,8 +8,6 @@ public class AgentCharacter : MonoBehaviour, IDamagable, IAgentMovable
     [SerializeField] private float _rotationSpeed;
     [SerializeField] private HealthBar _healthBar;
 
-    [SerializeField] private float _patrolRadius;
-
     private AgentMover _mover;
     private DirectionalRotator _rotator;
 
@@ -72,5 +70,4 @@ public class AgentCharacter : MonoBehaviour, IDamagable, IAgentMovable
     }
 
     private void ResetHitFlag() => IsHit = false;
-
 }

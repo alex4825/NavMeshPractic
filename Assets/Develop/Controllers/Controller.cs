@@ -1,14 +1,12 @@
 public abstract class Controller
 {
-    private bool _isEnabled;
+    public abstract bool HasInput { get; }
 
-    public virtual void Enable() => _isEnabled = true;
-
-    public virtual void Disable() => _isEnabled = false;
+    public bool IsEnabled { get; set; }
 
     public void Update()
     {
-        if (_isEnabled == false)
+        if (IsEnabled == false)
             return;
 
         UpdateLogic();

@@ -61,10 +61,6 @@ public class CharacterAnimator : MonoBehaviour
             case CharacterStates.Running:
                 _animator.SetBool(IsRunningKey, true);
                 break;
-
-            case CharacterStates.Die:
-                _animator.SetBool(IsDieKey, false);
-                break;
         }
     }
 }

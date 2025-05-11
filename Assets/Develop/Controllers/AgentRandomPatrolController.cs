@@ -4,14 +4,14 @@ public class AgentRandomPatrolController : Controller
 {
     private IAgentMovable _movable;
     private float _patrolRadius;
-    private LayerMask _groundMask;
 
-    public AgentRandomPatrolController(IAgentMovable movable, float patrolRadius, LayerMask groundMask)
+    public AgentRandomPatrolController(IAgentMovable movable, float patrolRadius)
     {
         _movable = movable;
         _patrolRadius = patrolRadius;
-        _groundMask = groundMask;
     }
+
+    public override bool HasInput => true;
 
     protected override void UpdateLogic()
     {

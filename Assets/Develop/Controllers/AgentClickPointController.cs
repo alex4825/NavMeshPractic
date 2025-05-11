@@ -7,16 +7,24 @@ public class AgentClickPointController : Controller
     private IAgentMovable _movable;
     private LayerMask _groundMask;
 
+    private bool _isDestinationSetted;
+
     public AgentClickPointController(IAgentMovable movable, LayerMask groundMask)
     {
         _movable = movable;
         _groundMask = groundMask;
     }
 
+    public override bool HasInput => _isDestinationSetted;
+
     protected override void UpdateLogic()
     {
-        if (TryGetClickPosition(out Vector3 clickPosition))
+        _isDestinationSetted = TryGetClickPosition(out Vector3 clickPosition);
+
+        if (_isDestinationSetted)
+        {
             _movable.SetDestination(clickPosition);
+        }
     }
 
     private bool TryGetClickPosition(out Vector3 clickPosition)
