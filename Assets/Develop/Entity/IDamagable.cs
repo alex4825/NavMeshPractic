@@ -1,14 +1,12 @@
 using UnityEngine;
 
-public interface IDamagable
+public interface IDamagable : ITransformPosition
 {
     float MaxHealth { get; }
 
     float Health { get; }
 
     bool IsHit { get; }
-
-    Vector3 Position { get; }
 
     void TakeDamage(float damage);
 }

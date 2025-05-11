@@ -3,7 +3,7 @@ using UnityEngine;
 public class CharacterAnimator : MonoBehaviour
 {
     [SerializeField] private Animator _animator;
-    [SerializeField] private Character _character;
+    [SerializeField] private AgentCharacter _character;
     [SerializeField] private float _transitionSpeed;
 
     private readonly int IsRunningKey = Animator.StringToHash("IsRunning");
@@ -11,7 +11,7 @@ public class CharacterAnimator : MonoBehaviour
     private readonly int IsDieKey = Animator.StringToHash("IsDie");
 
     private readonly string InjuryLayerName = "Injury Layer";
-    private const int MaxInjuryWeight = 1;
+    private const float MaxInjuryWeight = 1f;
 
     private CharacterStates _characterLastFrameState;
 
@@ -32,6 +32,9 @@ public class CharacterAnimator : MonoBehaviour
             SetInjuryWeight(MaxInjuryWeight);
         else
             SetInjuryWeight(0);
+
+        if (_character.IsHit)
+            AnimateHit();
     }
 
     public void AnimateHit() => _animator.SetTrigger(HitKey);
@@ -44,7 +47,7 @@ public class CharacterAnimator : MonoBehaviour
         int injuryIndex = _animator.GetLayerIndex(InjuryLayerName);
         float currentWeight = _animator.GetLayerWeight(injuryIndex);
 
-        _animator.SetLayerWeight(injuryIndex, Mathf.Lerp(currentWeight, value, step)) ;
+        _animator.SetLayerWeight(injuryIndex, Mathf.Lerp(currentWeight, value, step));
     }
 
     private void SetAnimationFrom(CharacterStates state)

@@ -252,18 +252,6 @@ AnimatorController:
     m_SyncedLayerAffectsTiming: 0
     m_Controller: {fileID: 9100000}
   - serializedVersion: 5
-    m_Name: Hit Layer
-    m_StateMachine: {fileID: -7526516535897226974}
-    m_Mask: {fileID: 31900000, guid: 5347d2268a334474186d8522e5cbfd90, type: 2}
-    m_Motions: []
-    m_Behaviours: []
-    m_BlendingMode: 0
-    m_SyncedLayerIndex: -1
-    m_DefaultWeight: 1
-    m_IKPass: 0
-    m_SyncedLayerAffectsTiming: 0
-    m_Controller: {fileID: 9100000}
-  - serializedVersion: 5
     m_Name: Injury Layer
     m_StateMachine: {fileID: 3929109160320164939}
     m_Mask: {fileID: 31900000, guid: 5347d2268a334474186d8522e5cbfd90, type: 2}
@@ -284,6 +272,18 @@ AnimatorController:
     m_DefaultWeight: 0
     m_IKPass: 0
     m_SyncedLayerAffectsTiming: 1
+    m_Controller: {fileID: 9100000}
+  - serializedVersion: 5
+    m_Name: Hit Layer
+    m_StateMachine: {fileID: -7526516535897226974}
+    m_Mask: {fileID: 31900000, guid: 5347d2268a334474186d8522e5cbfd90, type: 2}
+    m_Motions: []
+    m_Behaviours: []
+    m_BlendingMode: 1
+    m_SyncedLayerIndex: -1
+    m_DefaultWeight: 1
+    m_IKPass: 0
+    m_SyncedLayerAffectsTiming: 0
     m_Controller: {fileID: 9100000}
 --- !u!1102 &1444597466737278139
 AnimatorState:

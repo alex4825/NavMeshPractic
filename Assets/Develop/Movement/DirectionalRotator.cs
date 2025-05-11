@@ -1,11 +1,10 @@
 using UnityEngine;
 
-public class DirectionalRotator : IRotatable
+public class DirectionalRotator
 {
-    private const float DeathZone = 0.05f;
-
     private Transform _transform;
     private float _rotationSpeed;
+    private Vector3 _currentDirection;
 
     public DirectionalRotator(Transform transform, float rotationSpeed)
     {
@@ -13,13 +12,19 @@ public class DirectionalRotator : IRotatable
         _rotationSpeed = rotationSpeed;
     }
 
-    public void UpdateRotation(Vector3 currentVelocity)
+    public Quaternion CurrentRotation => _transform.rotation;
+
+    public void SetDirection(Vector3 direction) => _currentDirection = direction;
+
+    public void Update()
     {
-        if (currentVelocity.magnitude < DeathZone)
+        if (_currentDirection.magnitude < 0.05f)
             return;
 
-        Quaternion aimRotation = Quaternion.LookRotation(currentVelocity);
+        Quaternion lookRotation = Quaternion.LookRotation(_currentDirection.normalized);
+
         float step = _rotationSpeed * Time.deltaTime;
-        _transform.rotation = Quaternion.RotateTowards(_transform.rotation, aimRotation, step);
+
+        _transform.rotation = Quaternion.RotateTowards(_transform.rotation, lookRotation, step);
     }
 }

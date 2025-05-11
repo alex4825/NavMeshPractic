@@ -147,7 +147,7 @@ MonoBehaviour:
   _explosionParticlesPrefab: {fileID: 5444105318733727396, guid: cf82839c411151342a7b2337bda9fb34,
     type: 3}
   _delayAfterTrigger: 3
-  _damage: 15
+  _damage: 40
 --- !u!114 &-2005369969435580758
 MonoBehaviour:
   m_ObjectHideFlags: 0

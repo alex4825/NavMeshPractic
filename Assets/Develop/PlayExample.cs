@@ -2,24 +2,25 @@ using UnityEngine;
 
 public class PlayExample : MonoBehaviour
 {
-    [SerializeField] private Character _character;
-    [SerializeField] private CharacterAnimator _characterAnimator;
-    [SerializeField] private HealthBar _characterHealthBar;
+    [SerializeField] private AgentCharacter _character;
+    [SerializeField] private LayerMask _groundMask;
+
+    [SerializeField] private float _maxIdleTime;
+
+    private Controller _agentCharacterController;
+
+    private float _idleTimer;
 
     private void Awake()
     {
-        _character.Initiate();
-        _characterHealthBar.Initiate(_character);
+        _agentCharacterController =
+            new AgentClickPointController(_character, _groundMask);
+
+        _agentCharacterController.Enable();
     }
 
     private void Update()
     {
-        if (_character.IsHit)
-        {
-            _characterAnimator.AnimateHit();
-            _characterHealthBar.RecalculateBarWidth();
-
-            _character.ResetHitFlag();
-        }
+        _agentCharacterController.Update();
     }
 }

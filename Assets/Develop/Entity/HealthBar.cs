@@ -21,9 +21,12 @@ public class HealthBar : MonoBehaviour
         _isInitiated = true;
     }
 
-    public void RecalculateBarWidth()
+    private void Update()
     {
-        if (_isInitiated) 
-            _barImage.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, _damagable.Health * _healthWidthKoef);
+        if (_isInitiated && _damagable.IsHit)
+            RecalculateBarWidth();
     }
+
+    public void RecalculateBarWidth()
+         => _barImage.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, _damagable.Health * _healthWidthKoef);
 }

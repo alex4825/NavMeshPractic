@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEngine;
 
 public class Bomb : MonoBehaviour
@@ -21,6 +22,7 @@ public class Bomb : MonoBehaviour
                 if (IsDamagableInTriggerZone())
                     _currentDamagable.TakeDamage(_damage);
 
+                Instantiate(_explosionParticlesPrefab, transform.position, Quaternion.identity);
                 Destroy(gameObject);
             }
         }
@@ -38,12 +40,6 @@ public class Bomb : MonoBehaviour
     {
         Gizmos.color = new Color(1, 0, 0, 0.5f);
         Gizmos.DrawSphere(transform.position, _triggerCollider.radius);
-    }
-
-    private void OnDestroy()
-    {
-        if (Application.isPlaying)
-            Instantiate(_explosionParticlesPrefab, transform.position, Quaternion.identity);
     }
 
     private bool IsDamagableInTriggerZone() => Vector3.Distance(_currentDamagable.Position, transform.position) < _triggerCollider.radius;
