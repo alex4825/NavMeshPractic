@@ -6,6 +6,7 @@ public class PlayExample : MonoBehaviour
     [SerializeField] private LayerMask _groundMask;
 
     [SerializeField] private float _maxIdleTime;
+    [SerializeField] private float _patrolRadius;
 
     private Controller _agentCharacterController;
 
@@ -14,7 +15,8 @@ public class PlayExample : MonoBehaviour
     private void Awake()
     {
         _agentCharacterController =
-            new AgentClickPointController(_character, _groundMask);
+            new AgentRandomPatrolController(_character, _patrolRadius, _groundMask);
+        //new AgentClickPointController(_character, _groundMask);
 
         _agentCharacterController.Enable();
     }
