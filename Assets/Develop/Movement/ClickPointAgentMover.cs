@@ -4,14 +4,12 @@ using UnityEngine.AI;
 public class ClickPointAgentMover : IMovable
 {
     private NavMeshAgent _agent;
-    private float _moveSpeed;
     private LayerMask _groundMask;
 
     public ClickPointAgentMover(NavMeshAgent agent, float moveSpeed, LayerMask groundMask)
     {
         _agent = agent;
-        _moveSpeed = moveSpeed;
-        _agent.speed = _moveSpeed;
+        _agent.speed = moveSpeed;
         _groundMask = groundMask;
 
         _agent.updateRotation = false;
@@ -19,10 +17,13 @@ public class ClickPointAgentMover : IMovable
 
     public Vector3 Velocity => _agent.desiredVelocity;
 
+    public bool IsEnable { get; set; }
+
     public void UpdateMovement()
     {
-        if (TryGetClickPosition(out Vector3 clickPosition))
-            _agent.SetDestination(clickPosition);
+        if (IsEnable)
+            if (TryGetClickPosition(out Vector3 clickPosition))
+                _agent.SetDestination(clickPosition);
     }
 
     private bool TryGetClickPosition(out Vector3 clickPosition)
