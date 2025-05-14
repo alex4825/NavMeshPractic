@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-public class AgentCharacter : MonoBehaviour, IDamagable, IAgentMovable
+public class AgentCharacter : MonoBehaviour, IDamagable, IHealthable, IAgentMovable
 {
     [SerializeField] private NavMeshAgent _agent;
     [SerializeField] private float _moveSpeed;
@@ -13,8 +13,6 @@ public class AgentCharacter : MonoBehaviour, IDamagable, IAgentMovable
 
     private const float InjuryKoef = 0.3f;
     private float _health;
-
-    public CharacterStates State { get; private set; }
 
     public bool IsHit { get; private set; }
 
@@ -33,6 +31,8 @@ public class AgentCharacter : MonoBehaviour, IDamagable, IAgentMovable
 
     public Vector3 CurrentVelocity => _mover.CurrentVelocity;
 
+    public Vector3 CurrentDestination => _agent.destination;
+
     public void Awake()
     {
         _agent.updateRotation = false;
@@ -42,18 +42,12 @@ public class AgentCharacter : MonoBehaviour, IDamagable, IAgentMovable
 
         Health = MaxHealth;
         _healthBar.Initiate(this);
-        State = CharacterStates.Idle;
     }
 
     public void Update()
     {
         _rotator.SetDirection(_mover.CurrentVelocity);
         _rotator.Update();
-
-        if (_mover.CurrentVelocity == Vector3.zero)
-            State = CharacterStates.Idle;
-        else
-            State = CharacterStates.Running;
     }
 
     private void LateUpdate()
@@ -66,7 +60,9 @@ public class AgentCharacter : MonoBehaviour, IDamagable, IAgentMovable
     public void TakeDamage(float damage)
     {
         IsHit = true;
-        Health -= damage;
+
+        if (damage > 0)
+            Health -= damage;
     }
 
     private void ResetHitFlag() => IsHit = false;

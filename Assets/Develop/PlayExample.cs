@@ -1,6 +1,4 @@
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.TextCore.Text;
 
 public class PlayExample : MonoBehaviour
 {
@@ -10,44 +8,21 @@ public class PlayExample : MonoBehaviour
     [SerializeField] private float _maxIdleTime;
     [SerializeField] private float _patrolRadius;
 
-    private Controller _agentIdleController;
-    private Controller _agentDefaultController;
+    private Controller _agentCharacterController;
 
-    private float _idleTimer;
 
     private void Awake()
     {
-        _agentDefaultController = new AgentClickPointController(_character, _groundMask);
-        _agentIdleController = new AgentRandomPatrolController(_character, _patrolRadius);
+        _agentCharacterController = new CompositeController(
+            new AgentClickPointController(_character, _groundMask),
+            new AgentRandomPatrolController(_character, _patrolRadius),
+            _maxIdleTime);
 
-        _agentDefaultController.IsEnabled = true;
+        _agentCharacterController.IsEnabled = true;
     }
 
     private void Update()
     {
-        switch (_character.State)
-        {
-            case CharacterStates.Idle:
-                _idleTimer += Time.deltaTime;
-                break;
-
-            case CharacterStates.Running:
-                _idleTimer = 0;
-
-                if (_agentDefaultController.HasInput)
-                    _agentIdleController.IsEnabled = false;
-
-                break;
-
-        }
-
-        if (_idleTimer >= _maxIdleTime)
-        {
-            _idleTimer = 0;
-            _agentIdleController.IsEnabled = true;
-        }
-
-        _agentDefaultController.Update();
-        _agentIdleController.Update();
+        _agentCharacterController.Update();
     }
 }

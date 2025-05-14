@@ -5,18 +5,23 @@ public class AgentRandomPatrolController : Controller
     private IAgentMovable _movable;
     private float _patrolRadius;
 
+    private Vector3 _currentDestination;
+
     public AgentRandomPatrolController(IAgentMovable movable, float patrolRadius)
     {
         _movable = movable;
         _patrolRadius = patrolRadius;
     }
 
-    public override bool HasInput => true;
+    public override bool HasInput => _currentDestination == _movable.CurrentDestination && _movable.CurrentVelocity != Vector3.zero;
 
     protected override void UpdateLogic()
     {
         if (_movable.CurrentVelocity == Vector3.zero)
+        {
             _movable.SetDestination(GetRandomDestinationInRadius());
+            _currentDestination = _movable.CurrentDestination;
+        }
     }
 
     private Vector3 GetRandomDestinationInRadius()

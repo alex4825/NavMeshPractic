@@ -13,20 +13,16 @@ public class CharacterAnimator : MonoBehaviour
     private readonly string InjuryLayerName = "Injury Layer";
     private const float MaxInjuryWeight = 1f;
 
-    private CharacterStates _characterLastFrameState;
+    private bool IsCharacterRunning => _character.CurrentVelocity != Vector3.zero;
 
     private void Awake()
     {
-        UpdateLastFrameState();
-        SetAnimationFrom(_character.State);
+        _animator.SetBool(IsRunningKey, false);
     }
 
     private void Update()
     {
-        if (_characterLastFrameState != _character.State)
-            SetAnimationFrom(_character.State);
-
-        UpdateLastFrameState();
+        _animator.SetBool(IsRunningKey, IsCharacterRunning);
 
         if (_character.IsStrongInjury)
             SetInjuryWeight(MaxInjuryWeight);
@@ -39,8 +35,6 @@ public class CharacterAnimator : MonoBehaviour
 
     public void AnimateHit() => _animator.SetTrigger(HitKey);
 
-    private void UpdateLastFrameState() => _characterLastFrameState = _character.State;
-
     private void SetInjuryWeight(float value)
     {
         float step = _transitionSpeed * Time.deltaTime;
@@ -48,19 +42,5 @@ public class CharacterAnimator : MonoBehaviour
         float currentWeight = _animator.GetLayerWeight(injuryIndex);
 
         _animator.SetLayerWeight(injuryIndex, Mathf.Lerp(currentWeight, value, step));
-    }
-
-    private void SetAnimationFrom(CharacterStates state)
-    {
-        switch (state)
-        {
-            case CharacterStates.Idle:
-                _animator.SetBool(IsRunningKey, false);
-                break;
-
-            case CharacterStates.Running:
-                _animator.SetBool(IsRunningKey, true);
-                break;
-        }
     }
 }

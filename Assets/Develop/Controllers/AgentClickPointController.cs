@@ -7,7 +7,7 @@ public class AgentClickPointController : Controller
     private IAgentMovable _movable;
     private LayerMask _groundMask;
 
-    private bool _isDestinationSetted;
+    private Vector3 _currentDestination;
 
     public AgentClickPointController(IAgentMovable movable, LayerMask groundMask)
     {
@@ -15,15 +15,14 @@ public class AgentClickPointController : Controller
         _groundMask = groundMask;
     }
 
-    public override bool HasInput => _isDestinationSetted;
+    public override bool HasInput => _currentDestination == _movable.CurrentDestination && _movable.CurrentVelocity != Vector3.zero;
 
     protected override void UpdateLogic()
     {
-        _isDestinationSetted = TryGetClickPosition(out Vector3 clickPosition);
-
-        if (_isDestinationSetted)
+        if (TryGetClickPosition(out Vector3 clickPosition))
         {
             _movable.SetDestination(clickPosition);
+            _currentDestination = _movable.CurrentDestination;
         }
     }
 
