@@ -5,6 +5,7 @@ public class Bomb : MonoBehaviour
 {
     [SerializeField] private SphereCollider _triggerCollider;
     [SerializeField] private ParticleSystem _explosionParticlesPrefab;
+    [SerializeField] private AudioClip _destroySound; 
     [SerializeField] private float _delayAfterTrigger;
     [SerializeField] private float _damage;
 
@@ -22,6 +23,9 @@ public class Bomb : MonoBehaviour
             damagable.TakeDamage(_damage);
 
         Instantiate(_explosionParticlesPrefab, transform.position, Quaternion.identity);
+
+        AudioSource.PlayClipAtPoint(_destroySound, transform.position);
+
         Destroy(gameObject);
     }
 
