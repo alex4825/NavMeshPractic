@@ -4,12 +4,17 @@ using UnityEngine.AI;
 public class AgentCharacter : MonoBehaviour, IDamagable, IHealthable, IAgentMovable
 {
     [SerializeField] private NavMeshAgent _agent;
+    [SerializeField] private HealthBar _healthBar;
+
     [SerializeField] private float _moveSpeed;
     [SerializeField] private float _rotationSpeed;
-    [SerializeField] private HealthBar _healthBar;
+
+    [SerializeField] private float _jumpSpeed;
+    [SerializeField] private AnimationCurve _jumpCurve;
 
     private AgentMover _mover;
     private DirectionalRotator _rotator;
+    private AgentJumper _jumper;
 
     private const float InjuryKoef = 0.3f;
     private float _health;
@@ -33,20 +38,22 @@ public class AgentCharacter : MonoBehaviour, IDamagable, IHealthable, IAgentMova
 
     public Vector3 CurrentDestination => _agent.destination;
 
-    public void Awake()
+    public bool InJumpProcess => _jumper.InProcess;
+
+    private void Awake()
     {
         _agent.updateRotation = false;
 
         _mover = new AgentMover(_agent, _moveSpeed);
         _rotator = new DirectionalRotator(transform, _rotationSpeed);
+        _jumper = new AgentJumper(_jumpSpeed, _agent, this, _jumpCurve);
 
         Health = MaxHealth;
         _healthBar.Initiate(this);
     }
 
-    public void Update()
+    private void Update()
     {
-        _rotator.SetDirection(_mover.CurrentVelocity);
         _rotator.Update();
     }
 
@@ -57,6 +64,8 @@ public class AgentCharacter : MonoBehaviour, IDamagable, IHealthable, IAgentMova
 
     public void SetDestination(Vector3 point) => _mover.SetDestination(point);
 
+    public void SetRotation(Vector3 direction) => _rotator.SetDirection(direction);
+
     public void TakeDamage(float damage)
     {
         IsHit = true;
@@ -64,6 +73,20 @@ public class AgentCharacter : MonoBehaviour, IDamagable, IHealthable, IAgentMova
         if (damage > 0)
             Health -= damage;
     }
+
+    public bool IsOnNavMeshLink(out OffMeshLinkData offMeshLinkData)
+    {
+        if (_agent.isOnOffMeshLink)
+        {
+            offMeshLinkData = _agent.currentOffMeshLinkData;
+            return true;
+        }
+
+        offMeshLinkData = default;
+        return false;
+    }
+
+    public void Jump(OffMeshLinkData offMeshLinkData) => _jumper.Jump(offMeshLinkData);
 
     private void ResetHitFlag() => IsHit = false;
 }

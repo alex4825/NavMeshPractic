@@ -1,26 +1,24 @@
 using UnityEngine;
 
-public class AgentRandomPatrolController : Controller
+public class AgentRandomPatrolController : AgentJumpableController
 {
-    private IAgentMovable _movable;
     private float _patrolRadius;
 
     private Vector3 _currentDestination;
 
-    public AgentRandomPatrolController(IAgentMovable movable, float patrolRadius)
+    public AgentRandomPatrolController(AgentCharacter character, float patrolRadius): base(character)
     {
-        _movable = movable;
         _patrolRadius = patrolRadius;
     }
 
-    public override bool HasInput => _currentDestination == _movable.CurrentDestination && _movable.CurrentVelocity != Vector3.zero;
+    public override bool HasInput => _currentDestination == Character.CurrentDestination && Character.CurrentVelocity != Vector3.zero;
 
-    protected override void UpdateLogic()
+    protected override void UpdateMovement()
     {
-        if (_movable.CurrentVelocity == Vector3.zero)
+        if (Character.CurrentVelocity == Vector3.zero)
         {
-            _movable.SetDestination(GetRandomDestinationInRadius());
-            _currentDestination = _movable.CurrentDestination;
+            Character.SetDestination(GetRandomDestinationInRadius());
+            _currentDestination = Character.CurrentDestination;
         }
     }
 

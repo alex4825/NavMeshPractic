@@ -1,5 +1,9 @@
 public abstract class Controller
 {
+    public Controller()
+    {
+
+    }
     public abstract bool HasInput { get; }
 
     public bool IsEnabled { get; set; }

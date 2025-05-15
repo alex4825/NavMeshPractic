@@ -8,7 +8,7 @@ public class CharacterAnimator : MonoBehaviour
 
     private readonly int IsRunningKey = Animator.StringToHash("IsRunning");
     private readonly int HitKey = Animator.StringToHash("Hit");
-    private readonly int IsDieKey = Animator.StringToHash("IsDie");
+    private readonly int InJumpProcessKey = Animator.StringToHash("InJumpProcess");
 
     private readonly string InjuryLayerName = "Injury Layer";
     private const float MaxInjuryWeight = 1f;
@@ -31,6 +31,8 @@ public class CharacterAnimator : MonoBehaviour
 
         if (_character.IsHit)
             AnimateHit();
+
+        _animator.SetBool(InJumpProcessKey, _character.InJumpProcess);
     }
 
     public void AnimateHit() => _animator.SetTrigger(HitKey);

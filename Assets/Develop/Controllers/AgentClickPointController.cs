@@ -1,28 +1,26 @@
 using UnityEngine;
 
-public class AgentClickPointController : Controller
+public class AgentClickPointController : AgentJumpableController
 {
     private const int LeftMouseKey = 0;
 
-    private IAgentMovable _movable;
     private LayerMask _groundMask;
 
     private Vector3 _currentDestination;
 
-    public AgentClickPointController(IAgentMovable movable, LayerMask groundMask)
+    public AgentClickPointController(AgentCharacter character, LayerMask groundMask) : base(character)
     {
-        _movable = movable;
         _groundMask = groundMask;
     }
 
-    public override bool HasInput => _currentDestination == _movable.CurrentDestination && _movable.CurrentVelocity != Vector3.zero;
+    public override bool HasInput => _currentDestination == Character.CurrentDestination && Character.CurrentVelocity != Vector3.zero;
 
-    protected override void UpdateLogic()
+    protected override void UpdateMovement()
     {
         if (TryGetClickPosition(out Vector3 clickPosition))
         {
-            _movable.SetDestination(clickPosition);
-            _currentDestination = _movable.CurrentDestination;
+            Character.SetDestination(clickPosition);
+            _currentDestination = Character.CurrentDestination;
         }
     }
 
