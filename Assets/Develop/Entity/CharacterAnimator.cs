@@ -4,6 +4,7 @@ public class CharacterAnimator : MonoBehaviour
 {
     [SerializeField] private Animator _animator;
     [SerializeField] private AgentCharacter _character;
+    [SerializeField] private SoundService _soundService;
     [SerializeField] private float _transitionSpeed;
 
     private readonly int IsRunningKey = Animator.StringToHash("IsRunning");
@@ -36,6 +37,8 @@ public class CharacterAnimator : MonoBehaviour
     }
 
     public void AnimateHit() => _animator.SetTrigger(HitKey);
+
+    public void PlayFootSound() => _soundService.PlayFootSound(_character.Position);
 
     private void SetInjuryWeight(float value)
     {

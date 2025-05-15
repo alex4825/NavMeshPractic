@@ -146,9 +146,8 @@ MonoBehaviour:
   _triggerCollider: {fileID: 2259147805309444269}
   _explosionParticlesPrefab: {fileID: 5444105318733727396, guid: cf82839c411151342a7b2337bda9fb34,
     type: 3}
-  _destroySound: {fileID: 8300000, guid: 38dcdf707e9db5e4cb16fafa366c5c56, type: 3}
-  _soundsMixerGroup: {fileID: -3615935748297271473, guid: 0d2738b848aa8e642969f91e9b577020,
-    type: 2}
+  _soundService: {fileID: 3575978887079981259, guid: 3f7f7e03b1f203d4496de403ef20160c,
+    type: 3}
   _delayAfterTrigger: 3
   _damage: 40
 --- !u!114 &-2005369969435580758
