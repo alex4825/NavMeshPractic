@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -57,11 +58,6 @@ public class AgentCharacter : MonoBehaviour, IDamagable, IHealthable, IAgentMova
         _rotator.Update();
     }
 
-    private void LateUpdate()
-    {
-        ResetHitFlag();
-    }
-
     public void SetDestination(Vector3 point) => _mover.SetDestination(point);
 
     public void SetRotation(Vector3 direction) => _rotator.SetDirection(direction);
@@ -69,6 +65,7 @@ public class AgentCharacter : MonoBehaviour, IDamagable, IHealthable, IAgentMova
     public void TakeDamage(float damage)
     {
         IsHit = true;
+        StartCoroutine(ResetHitFlagOnEndOfFrame());
 
         if (damage > 0)
             Health -= damage;
@@ -88,5 +85,10 @@ public class AgentCharacter : MonoBehaviour, IDamagable, IHealthable, IAgentMova
 
     public void Jump(OffMeshLinkData offMeshLinkData) => _jumper.Jump(offMeshLinkData);
 
-    private void ResetHitFlag() => IsHit = false;
+    private IEnumerator ResetHitFlagOnEndOfFrame()
+    {
+        yield return null;
+
+        IsHit = false;
+    }
 }
