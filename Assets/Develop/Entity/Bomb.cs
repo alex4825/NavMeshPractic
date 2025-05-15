@@ -1,4 +1,4 @@
-using UnityEditor;
+using System.Collections;
 using UnityEngine;
 
 public class Bomb : MonoBehaviour
@@ -8,32 +8,21 @@ public class Bomb : MonoBehaviour
     [SerializeField] private float _delayAfterTrigger;
     [SerializeField] private float _damage;
 
-    private float _timer = 0;
-    private IDamagable _currentDamagable;
-
-    private void Update()
-    {
-        if (_currentDamagable != null)
-        {
-            _timer += Time.deltaTime;
-
-            if (_timer > _delayAfterTrigger)
-            {
-                if (IsDamagableInTriggerZone())
-                    _currentDamagable.TakeDamage(_damage);
-
-                Instantiate(_explosionParticlesPrefab, transform.position, Quaternion.identity);
-                Destroy(gameObject);
-            }
-        }
-    }
-
     private void OnTriggerEnter(Collider other)
     {
         if (other.TryGetComponent<IDamagable>(out IDamagable damagable))
-        {
-            _currentDamagable = damagable;
-        }
+            StartCoroutine(ExplodeProcess(damagable));
+    }
+
+    private IEnumerator ExplodeProcess(IDamagable damagable)
+    {
+        yield return new WaitForSeconds(_delayAfterTrigger);
+
+        if (InTriggerZone(damagable))
+            damagable.TakeDamage(_damage);
+
+        Instantiate(_explosionParticlesPrefab, transform.position, Quaternion.identity);
+        Destroy(gameObject);
     }
 
     private void OnDrawGizmos()
@@ -42,5 +31,5 @@ public class Bomb : MonoBehaviour
         Gizmos.DrawSphere(transform.position, _triggerCollider.radius);
     }
 
-    private bool IsDamagableInTriggerZone() => Vector3.Distance(_currentDamagable.Position, transform.position) < _triggerCollider.radius;
+    private bool InTriggerZone(IDamagable damagable) => Vector3.Distance(damagable.Position, transform.position) < _triggerCollider.radius;
 }
