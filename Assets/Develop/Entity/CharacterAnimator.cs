@@ -5,7 +5,8 @@ public class CharacterAnimator : MonoBehaviour
     [SerializeField] private Animator _animator;
     [SerializeField] private AgentCharacter _character;
     [SerializeField] private SoundService _soundService;
-    [SerializeField] private float _transitionSpeed;
+    [SerializeField] private float _transitionDuration;
+    [SerializeField] private float _damageEffectDuration;
 
     private readonly int IsRunningKey = Animator.StringToHash("IsRunning");
     private readonly int HitKey = Animator.StringToHash("Hit");
@@ -14,11 +15,14 @@ public class CharacterAnimator : MonoBehaviour
     private readonly string InjuryLayerName = "Injury Layer";
     private const float MaxInjuryWeight = 1f;
 
+    private DamageEffectView _damageEffectView;
+
     private bool IsCharacterRunning => _character.CurrentVelocity != Vector3.zero;
 
     private void Awake()
     {
         _animator.SetBool(IsRunningKey, false);
+        _damageEffectView = new DamageEffectView(GetComponentsInChildren<Renderer>(), _damageEffectDuration, this);
     }
 
     private void Update()
@@ -36,13 +40,17 @@ public class CharacterAnimator : MonoBehaviour
         _animator.SetBool(InJumpProcessKey, _character.InJumpProcess);
     }
 
-    public void AnimateHit() => _animator.SetTrigger(HitKey);
+    public void AnimateHit()
+    {
+        _animator.SetTrigger(HitKey);
+        _damageEffectView.PlayEffect();
+    }
 
     public void PlayFootSound() => _soundService.PlayFootSound(_character.Position);
 
     private void SetInjuryWeight(float value)
     {
-        float step = _transitionSpeed * Time.deltaTime;
+        float step = _transitionDuration * Time.deltaTime;
         int injuryIndex = _animator.GetLayerIndex(InjuryLayerName);
         float currentWeight = _animator.GetLayerWeight(injuryIndex);
 
