@@ -7,6 +7,7 @@ public class CharacterAnimator : MonoBehaviour
     [SerializeField] private SoundService _soundService;
     [SerializeField] private float _transitionDuration;
     [SerializeField] private float _damageEffectDuration;
+    [SerializeField] private float _dissolveEffectDuration;
 
     private readonly int IsRunningKey = Animator.StringToHash("IsRunning");
     private readonly int HitKey = Animator.StringToHash("Hit");
@@ -17,7 +18,10 @@ public class CharacterAnimator : MonoBehaviour
     private const string InjuryLayerName = "Injury Layer";
     private const float MaxInjuryWeight = 1f;
 
-    private DamageEffectView _damageEffectView;
+    private const string DamageStranghtKey = "_DamageStranght";
+    private const string DissolveAdgeKey = "_DissolveAdge";
+
+    private EffectView _shortEffectView;
 
     private bool _isCharacterDie;
 
@@ -26,7 +30,7 @@ public class CharacterAnimator : MonoBehaviour
     private void Awake()
     {
         _animator.SetBool(IsRunningKey, false);
-        _damageEffectView = new DamageEffectView(GetComponentsInChildren<Renderer>(), _damageEffectDuration, this);
+        _shortEffectView = new EffectView(GetComponentsInChildren<Renderer>(), this);
     }
 
     private void Update()
@@ -40,12 +44,13 @@ public class CharacterAnimator : MonoBehaviour
 
         if (_character.IsHit)
         {
-            _damageEffectView.PlayEffect();
+            _shortEffectView.PlayIncreaseDecreaseEffect(DamageStranghtKey, _damageEffectDuration);
 
             if (_character.IsAlive == false)
             {
                 _isCharacterDie = true;
                 _animator.SetTrigger(DieKey);
+                _shortEffectView.PlayIncreaseEffect(DissolveAdgeKey, _dissolveEffectDuration);
                 return;
             }
 
@@ -56,6 +61,7 @@ public class CharacterAnimator : MonoBehaviour
         {
             _isCharacterDie = false;
             _animator.SetTrigger(AliveKey);
+            _shortEffectView.PlayDecreaseEffect(DissolveAdgeKey, _dissolveEffectDuration);
         }
 
         _animator.SetBool(InJumpProcessKey, _character.InJumpProcess);

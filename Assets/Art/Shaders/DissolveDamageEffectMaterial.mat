@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: DamageEffectMaterial
+  m_Name: DissolveDamageEffectMaterial
   m_Shader: {fileID: -6465566751694194690, guid: d94ee4830ba3e404b8f2bdadb1d4e8bd,
     type: 3}
   m_Parent: {fileID: 0}
@@ -50,12 +50,19 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _DissolveAdge: 0
+    - _DissolveEdgeWidth: 0.005
+    - _DissolveNoiceScale: 250
     - _EffectStrangth: 0
-    - _QueueControl: 0
+    - _QueueControl: 1
     - _QueueOffset: 0
-    - _Smoothness: 0.4
+    - _Smoothness: 0.54
     m_Colors:
+    - _Color: {r: 0.32549015, g: 0.8000177, b: 1, a: 1}
+    - _DamageColor: {r: 1, g: 0, b: 0, a: 1}
+    - _DissolveEdgeColor: {r: 4, g: 3.282924, b: 0, a: 0}
     - _EffectColor: {r: 1, g: 0, b: 0, a: 1}
+    - _Emission: {r: 0, g: 1, b: 0.8414838, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &6374829613661759162
 MonoBehaviour:
