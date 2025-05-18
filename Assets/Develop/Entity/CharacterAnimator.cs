@@ -21,7 +21,7 @@ public class CharacterAnimator : MonoBehaviour
     private const string DamageStranghtKey = "_DamageStranght";
     private const string DissolveAdgeKey = "_DissolveAdge";
 
-    private EffectView _shortEffectView;
+    private ShortEffectView _shortEffectView;
 
     private bool _isCharacterDie;
 
@@ -30,7 +30,7 @@ public class CharacterAnimator : MonoBehaviour
     private void Awake()
     {
         _animator.SetBool(IsRunningKey, false);
-        _shortEffectView = new EffectView(GetComponentsInChildren<Renderer>(), this);
+        _shortEffectView = new ShortEffectView(GetComponentsInChildren<Renderer>(), this);
     }
 
     private void Update()

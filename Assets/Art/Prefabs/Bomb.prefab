@@ -65,7 +65,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 6892232844440235036, guid: f3cc431a1c0c56c42b227d09798b134f, type: 3}
+  - {fileID: 2100000, guid: b43e49e1377af864a86600a2537bb939, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -150,6 +150,7 @@ MonoBehaviour:
     type: 3}
   _delayAfterTrigger: 3
   _damage: 40
+  _detonationSpeed: 5
 --- !u!114 &-2005369969435580758
 MonoBehaviour:
   m_ObjectHideFlags: 0

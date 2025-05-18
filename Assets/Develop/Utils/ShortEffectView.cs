@@ -1,12 +1,12 @@
 using System.Collections;
 using UnityEngine;
 
-public class EffectView
+public class ShortEffectView
 {
     private Renderer[] _renderers;
     private MonoBehaviour _monoBehaviour;
 
-    public EffectView(Renderer[] renderers, MonoBehaviour monoBehaviour)
+    public ShortEffectView(Renderer[] renderers, MonoBehaviour monoBehaviour)
     {
         _renderers = renderers;
         _monoBehaviour = monoBehaviour;

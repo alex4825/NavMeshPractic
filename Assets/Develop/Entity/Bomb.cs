@@ -7,10 +7,18 @@ public class Bomb : MonoBehaviour
     [SerializeField] private SphereCollider _triggerCollider;
     [SerializeField] private ParticleSystem _explosionParticlesPrefab;
 
-    [SerializeField] private SoundService _soundService; 
+    [SerializeField] private SoundService _soundService;
 
     [SerializeField] private float _delayAfterTrigger;
     [SerializeField] private float _damage;
+    [SerializeField] private float _detonationSpeed;
+
+    private DetonationView _detonationView;
+
+    private void Awake()
+    {
+        _detonationView = new DetonationView(GetComponent<Renderer>(), _detonationSpeed);
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -20,6 +28,8 @@ public class Bomb : MonoBehaviour
 
     private IEnumerator ExplodeProcess(IDamagable damagable)
     {
+        _detonationView.Play();
+
         yield return new WaitForSeconds(_delayAfterTrigger);
 
         if (InTriggerZone(damagable))
