@@ -11,8 +11,10 @@ public class CharacterAnimator : MonoBehaviour
     private readonly int IsRunningKey = Animator.StringToHash("IsRunning");
     private readonly int HitKey = Animator.StringToHash("Hit");
     private readonly int InJumpProcessKey = Animator.StringToHash("InJumpProcess");
+    private readonly int DieKey = Animator.StringToHash("Die");
+    private readonly int AliveKey = Animator.StringToHash("Alive");
 
-    private readonly string InjuryLayerName = "Injury Layer";
+    private const string InjuryLayerName = "Injury Layer";
     private const float MaxInjuryWeight = 1f;
 
     private DamageEffectView _damageEffectView;
@@ -35,16 +37,22 @@ public class CharacterAnimator : MonoBehaviour
             SetInjuryWeight(0);
 
         if (_character.IsHit)
+        {
+            _damageEffectView.PlayEffect();
+
+            if (_character.IsAlive == false)
+            {
+                _animator.SetTrigger(DieKey);
+                return;
+            }
+
             AnimateHit();
+        }
 
         _animator.SetBool(InJumpProcessKey, _character.InJumpProcess);
     }
 
-    public void AnimateHit()
-    {
-        _animator.SetTrigger(HitKey);
-        _damageEffectView.PlayEffect();
-    }
+    public void AnimateHit() => _animator.SetTrigger(HitKey);
 
     public void PlayFootSound() => _soundService.PlayFootSound(_character.Position);
 

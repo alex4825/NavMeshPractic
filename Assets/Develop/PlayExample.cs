@@ -23,6 +23,8 @@ public class PlayExample : MonoBehaviour
 
     private void Update()
     {
+        _agentCharacterController.IsEnabled = _character.IsAlive;
+
         _agentCharacterController.Update();
     }
 }
