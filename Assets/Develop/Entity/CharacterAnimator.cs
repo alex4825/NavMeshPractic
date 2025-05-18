@@ -19,6 +19,8 @@ public class CharacterAnimator : MonoBehaviour
 
     private DamageEffectView _damageEffectView;
 
+    private bool _isCharacterDie;
+
     private bool IsCharacterRunning => _character.CurrentVelocity != Vector3.zero;
 
     private void Awake()
@@ -42,11 +44,18 @@ public class CharacterAnimator : MonoBehaviour
 
             if (_character.IsAlive == false)
             {
+                _isCharacterDie = true;
                 _animator.SetTrigger(DieKey);
                 return;
             }
 
             AnimateHit();
+        }
+
+        if (_isCharacterDie && _character.IsAlive)
+        {
+            _isCharacterDie = false;
+            _animator.SetTrigger(AliveKey);
         }
 
         _animator.SetBool(InJumpProcessKey, _character.InJumpProcess);
