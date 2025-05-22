@@ -69,7 +69,7 @@ public class CharacterAnimator : MonoBehaviour
 
     public void AnimateHit() => _animator.SetTrigger(HitKey);
 
-    public void PlayFootSound() => _soundService.PlayFootSound(_character.Position);
+    public void PlayFootSound() => _soundService.PlayFootSound(GetComponent<AudioSource>());
 
     private void SetInjuryWeight(float value)
     {

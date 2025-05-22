@@ -2386,7 +2386,7 @@
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,
     "m_Hidden": false,
-    "m_Value": 0.41999998688697817,
+    "m_Value": 0.3700000047683716,
     "m_FloatType": 1,
     "m_RangeValues": {
         "x": 0.0,
@@ -3617,10 +3617,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -470.0,
-            "y": 502.0,
-            "width": 208.0,
-            "height": 435.0
+            "x": -467.0,
+            "y": 496.9999694824219,
+            "width": 207.99996948242188,
+            "height": 434.9999694824219
         }
     },
     "m_Slots": [

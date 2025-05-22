@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Audio;
 
 public class Bomb : MonoBehaviour
 {
@@ -37,9 +36,11 @@ public class Bomb : MonoBehaviour
 
         Instantiate(_explosionParticlesPrefab, transform.position, Quaternion.identity);
 
-        _soundService.PlayExplosionSound(transform.position);
+        _soundService.PlayExplosionSound(GetComponent<AudioSource>());
 
-        Destroy(gameObject);
+        GetComponent<Renderer>().enabled = false;
+        GetComponent<Collider>().enabled = false;
+        Destroy(gameObject, _soundService.ExplosionSoundLength);
     }
 
     private void OnDrawGizmos()
