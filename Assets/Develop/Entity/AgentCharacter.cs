@@ -1,4 +1,4 @@
-using System.Collections;
+using System;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -13,6 +13,8 @@ public class AgentCharacter : MonoBehaviour, IDamagable, IHealthable, IAgentMova
     [SerializeField] private float _jumpSpeed;
     [SerializeField] private AnimationCurve _jumpCurve;
 
+    [SerializeField] private float _deadDuration;
+
     private AgentMover _mover;
     private DirectionalRotator _rotator;
     private AgentJumper _jumper;
@@ -20,7 +22,8 @@ public class AgentCharacter : MonoBehaviour, IDamagable, IHealthable, IAgentMova
     private const float InjuryKoef = 0.3f;
     private float _health;
 
-    public bool IsHit { get; private set; }
+    public event Action<float> Dead;
+    public event Action Hit;
 
     public bool IsAlive => Health > 0;
 
@@ -66,6 +69,9 @@ public class AgentCharacter : MonoBehaviour, IDamagable, IHealthable, IAgentMova
             _rotator.Update();
             Lifetime += Time.deltaTime;
         }
+
+        if (IsDead)
+            Kill();
     }
 
     public void SetDestination(Vector3 point) => _mover.SetDestination(point);
@@ -74,11 +80,10 @@ public class AgentCharacter : MonoBehaviour, IDamagable, IHealthable, IAgentMova
 
     public void TakeDamage(float damage)
     {
-        if (IsAlive == false)
+        if (IsDead)
             return;
 
-        IsHit = true;
-        StartCoroutine(ResetHitOnEndOfFrame());
+        Hit?.Invoke();
 
         if (damage > 0)
             Health -= damage;
@@ -98,16 +103,18 @@ public class AgentCharacter : MonoBehaviour, IDamagable, IHealthable, IAgentMova
 
     public void Jump(OffMeshLinkData offMeshLinkData) => _jumper.Jump(offMeshLinkData);
 
+    public void Kill()
+    {
+        Dead?.Invoke(_deadDuration);
+        Destroy(gameObject, _deadDuration);
+
+        _healthBar.gameObject.SetActive(false);
+        _mover.Stop();
+    }
+
     public void Reborn()
     {
         Health = MaxHealth;
         Lifetime = 0;
-    }
-
-    private IEnumerator ResetHitOnEndOfFrame()
-    {
-        yield return null;
-
-        IsHit = false;
     }
 }

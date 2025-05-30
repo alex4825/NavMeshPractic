@@ -61,7 +61,7 @@ Material:
     m_Colors:
     - _Color: {r: 0.32549015, g: 0.8000177, b: 1, a: 1}
     - _DamageColor: {r: 1, g: 0, b: 0, a: 1}
-    - _DissolveEdgeColor: {r: 1.5838223, g: 0, b: 0, a: 0}
+    - _DissolveEdgeColor: {r: 3.1676447, g: 1.8270949, b: 0, a: 0}
     - _EffectColor: {r: 1, g: 0, b: 0, a: 1}
     - _Emission: {r: 0, g: 1, b: 0.8414838, a: 0}
   m_BuildTextureStacks: []

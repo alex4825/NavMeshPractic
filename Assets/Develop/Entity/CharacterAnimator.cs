@@ -7,7 +7,6 @@ public class CharacterAnimator : MonoBehaviour
     [SerializeField] private SoundService _soundService;
     [SerializeField] private float _transitionDuration;
     [SerializeField] private float _damageEffectDuration;
-    [SerializeField] private float _dissolveEffectDuration;
 
     private readonly int IsRunningKey = Animator.StringToHash("IsRunning");
     private readonly int HitKey = Animator.StringToHash("Hit");
@@ -23,14 +22,15 @@ public class CharacterAnimator : MonoBehaviour
 
     private ShortEffectView _shortEffectView;
 
-    private bool _isCharacterDie;
-
     private bool IsCharacterRunning => _character.CurrentVelocity != Vector3.zero;
 
     private void Awake()
     {
         _animator.SetBool(IsRunningKey, false);
         _shortEffectView = new ShortEffectView(GetComponentsInChildren<Renderer>(), this);
+
+        _character.Hit += OnCharacterHit;
+        _character.Dead += OnCharacterDead;
     }
 
     private void Update()
@@ -42,32 +42,8 @@ public class CharacterAnimator : MonoBehaviour
         else
             SetInjuryWeight(0);
 
-        if (_character.IsHit)
-        {
-            _shortEffectView.PlayIncreaseDecreaseEffect(DamageStranghtKey, _damageEffectDuration);
-
-            if (_character.IsAlive == false)
-            {
-                _isCharacterDie = true;
-                _animator.SetTrigger(DieKey);
-                _shortEffectView.PlayIncreaseEffect(DissolveAdgeKey, _dissolveEffectDuration);
-                return;
-            }
-
-            AnimateHit();
-        }
-
-        if (_isCharacterDie && _character.IsAlive)
-        {
-            _isCharacterDie = false;
-            _animator.SetTrigger(AliveKey);
-            _shortEffectView.PlayDecreaseEffect(DissolveAdgeKey, _dissolveEffectDuration);
-        }
-
         _animator.SetBool(InJumpProcessKey, _character.InJumpProcess);
     }
-
-    public void AnimateHit() => _animator.SetTrigger(HitKey);
 
     public void PlayFootSound() => _soundService.PlayFootSound(GetComponent<AudioSource>());
 
@@ -78,5 +54,17 @@ public class CharacterAnimator : MonoBehaviour
         float currentWeight = _animator.GetLayerWeight(injuryIndex);
 
         _animator.SetLayerWeight(injuryIndex, Mathf.Lerp(currentWeight, value, step));
+    }
+
+    private void OnCharacterDead(float deadDuration)
+    {
+        _animator.SetTrigger(DieKey);
+        _shortEffectView.PlayIncreaseEffect(DissolveAdgeKey, deadDuration);
+    }
+
+    private void OnCharacterHit()
+    {
+        _animator.SetTrigger(HitKey);
+        _shortEffectView.PlayIncreaseDecreaseEffect(DamageStranghtKey, _damageEffectDuration);
     }
 }

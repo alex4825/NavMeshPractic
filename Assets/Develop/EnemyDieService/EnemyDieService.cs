@@ -33,7 +33,7 @@ public class EnemyDieService : MonoBehaviour
             foreach (AgentCharacter enemy in _enemiesToDie)
             {
                 _enemiesDeadConditions.Remove(enemy);
-                Destroy(enemy.gameObject);
+                enemy.Kill();
             }
 
             _enemiesToDie.Clear();

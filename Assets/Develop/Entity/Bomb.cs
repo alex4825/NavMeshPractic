@@ -13,6 +13,7 @@ public class Bomb : MonoBehaviour
     [SerializeField] private float _detonationSpeed;
 
     private DetonationView _detonationView;
+    private Coroutine _explodeProcess;
 
     private void Awake()
     {
@@ -21,18 +22,21 @@ public class Bomb : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.TryGetComponent<IDamagable>(out IDamagable damagable))
-            StartCoroutine(ExplodeProcess(damagable));
+        if (other.TryGetComponent<IDamagable>(out IDamagable damagable) && _explodeProcess == null)
+            _explodeProcess = StartCoroutine(ExplodeProcess());
     }
 
-    private IEnumerator ExplodeProcess(IDamagable damagable)
+    private IEnumerator ExplodeProcess()
     {
         _detonationView.Play();
 
         yield return new WaitForSeconds(_delayAfterTrigger);
 
-        if (InTriggerZone(damagable))
-            damagable.TakeDamage(_damage);
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, _triggerCollider.radius);
+
+        foreach (Collider collider in hitColliders)
+            if (collider.TryGetComponent<IDamagable>(out IDamagable damagable) && InTriggerZone(damagable))
+                damagable.TakeDamage(_damage);
 
         Instantiate(_explosionParticlesPrefab, transform.position, Quaternion.identity);
 

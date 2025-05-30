@@ -2006,7 +2006,7 @@ MonoBehaviour:
       outWeight: 0
     - serializedVersion: 3
       time: 0.5
-      value: 0.5
+      value: 1
       inSlope: -0.0001946796
       outSlope: -0.0001946796
       tangentMode: 0
@@ -2025,6 +2025,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  _deadDuration: 5
   <MaxHealth>k__BackingField: 100
 --- !u!1 &5873454735564012608
 GameObject:
@@ -3001,7 +3002,6 @@ MonoBehaviour:
     type: 3}
   _transitionDuration: 5
   _damageEffectDuration: 1
-  _dissolveEffectDuration: 3
 --- !u!82 &3177673237169881663
 AudioSource:
   m_ObjectHideFlags: 0
