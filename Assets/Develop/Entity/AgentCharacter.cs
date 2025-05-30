@@ -1,7 +1,6 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.TextCore.Text;
 
 public class AgentCharacter : MonoBehaviour, IDamagable, IHealthable, IAgentMovable
 {
@@ -24,6 +23,10 @@ public class AgentCharacter : MonoBehaviour, IDamagable, IHealthable, IAgentMova
     public bool IsHit { get; private set; }
 
     public bool IsAlive => Health > 0;
+
+    public bool IsDead => Health <= 0;
+
+    public float Lifetime { get; private set; } = 0;
 
     [field: SerializeField] public float MaxHealth { get; private set; }
 
@@ -59,7 +62,10 @@ public class AgentCharacter : MonoBehaviour, IDamagable, IHealthable, IAgentMova
     private void Update()
     {
         if (IsAlive)
+        {
             _rotator.Update();
+            Lifetime += Time.deltaTime;
+        }
     }
 
     public void SetDestination(Vector3 point) => _mover.SetDestination(point);
@@ -92,7 +98,11 @@ public class AgentCharacter : MonoBehaviour, IDamagable, IHealthable, IAgentMova
 
     public void Jump(OffMeshLinkData offMeshLinkData) => _jumper.Jump(offMeshLinkData);
 
-    public void Reborn() => Health = MaxHealth;
+    public void Reborn()
+    {
+        Health = MaxHealth;
+        Lifetime = 0;
+    }
 
     private IEnumerator ResetHitOnEndOfFrame()
     {
