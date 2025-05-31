@@ -21,6 +21,7 @@ public class AgentCharacter : MonoBehaviour, IDamagable, IHealthable, IAgentMova
 
     private const float InjuryKoef = 0.3f;
     private float _health;
+    private bool _isInDesroyProcess;
 
     public event Action<float> Dead;
     public event Action Hit;
@@ -70,7 +71,7 @@ public class AgentCharacter : MonoBehaviour, IDamagable, IHealthable, IAgentMova
             Lifetime += Time.deltaTime;
         }
 
-        if (IsDead)
+        if (IsDead && _isInDesroyProcess == false)
             Kill();
     }
 
@@ -107,6 +108,7 @@ public class AgentCharacter : MonoBehaviour, IDamagable, IHealthable, IAgentMova
     {
         Dead?.Invoke(_deadDuration);
         Destroy(gameObject, _deadDuration);
+        _isInDesroyProcess = true;
 
         _healthBar.gameObject.SetActive(false);
         _mover.Stop();

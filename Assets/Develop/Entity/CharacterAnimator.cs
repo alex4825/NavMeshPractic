@@ -45,6 +45,12 @@ public class CharacterAnimator : MonoBehaviour
         _animator.SetBool(InJumpProcessKey, _character.InJumpProcess);
     }
 
+    private void OnDestroy()
+    {
+        _character.Hit -= OnCharacterHit;
+        _character.Dead -= OnCharacterDead;
+    }
+
     public void PlayFootSound() => _soundService.PlayFootSound(GetComponent<AudioSource>());
 
     private void SetInjuryWeight(float value)
@@ -64,7 +70,9 @@ public class CharacterAnimator : MonoBehaviour
 
     private void OnCharacterHit()
     {
-        _animator.SetTrigger(HitKey);
+        if (_character.IsAlive)
+            _animator.SetTrigger(HitKey);
+
         _shortEffectView.PlayIncreaseDecreaseEffect(DamageStranghtKey, _damageEffectDuration);
     }
 }

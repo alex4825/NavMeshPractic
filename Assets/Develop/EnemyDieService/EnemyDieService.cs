@@ -38,6 +38,8 @@ public class EnemyDieService : MonoBehaviour
 
             _enemiesToDie.Clear();
         }
+
+        Debug.Log($"Enemy count: {_enemiesDeadConditions.Count}");
     }
 
     private void OnDestroy()
