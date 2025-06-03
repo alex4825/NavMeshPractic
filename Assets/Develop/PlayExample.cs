@@ -45,7 +45,7 @@ public class PlayExample : MonoBehaviour
         _enemyFactory.OnSpawn -= OnEnemyFactorySpawn;
     }
 
-    private void OnEnemyFactorySpawn(AgentCharacter enemy, bool arg2, bool arg3, bool arg4)
+    private void OnEnemyFactorySpawn(AgentCharacter enemy, DeadTypes[] deadTypes)
     {
         Controller enemyController = new AgentRandomPatrolController(enemy, _patrolRadius);
         _enemiesControllers.Add(enemy, enemyController);

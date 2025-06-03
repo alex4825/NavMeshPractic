@@ -5,9 +5,9 @@ public class EnemyFactory : MonoBehaviour
 {
     [SerializeField] private AgentCharacter _enemyPrefab;
     [SerializeField] private Transform _spawnPoint;
-    [SerializeField] private KeysListener _keysListener;
+    [SerializeField] private DeadKeysListener _keysListener;
 
-    public event Action<AgentCharacter, bool, bool, bool> OnSpawn;
+    public event Action<AgentCharacter, DeadTypes[]> OnSpawn;
 
     private void Awake()
     {
@@ -19,10 +19,10 @@ public class EnemyFactory : MonoBehaviour
         _keysListener.KeysSelected -= SpawnEnemy;
     }
 
-    private void SpawnEnemy(bool isDeadActive, bool isTimeLeftActive, bool isTooMuchEnemiesActive)
+    private void SpawnEnemy(DeadTypes[] deadTypes)
     {
         AgentCharacter enemy = Instantiate(_enemyPrefab, _spawnPoint);
 
-        OnSpawn?.Invoke(enemy, isDeadActive, isTimeLeftActive, isTooMuchEnemiesActive);
+        OnSpawn?.Invoke(enemy, deadTypes);
     }
 }

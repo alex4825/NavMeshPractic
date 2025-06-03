@@ -8,8 +8,8 @@ public class EnemyDieService : MonoBehaviour
     [SerializeField] private float _minTimeToDie;
     [SerializeField] private float _maxTimeToDie;
     [SerializeField] private int _maxEnemies;
-
-    private Dictionary<AgentCharacter, Func<bool>[]> _enemiesDeadConditions;
+    
+    private Dictionary<AgentCharacter, Func<bool>[]> _enemiesToDeadConditions;
     private List<AgentCharacter> _enemiesToDie;
 
     private float TimeToDie => UnityEngine.Random.Range(_minTimeToDie, _maxTimeToDie);
@@ -17,13 +17,13 @@ public class EnemyDieService : MonoBehaviour
     private void Awake()
     {
         _enemyFactory.OnSpawn += OnEnemySpawn;
-        _enemiesDeadConditions = new();
+        _enemiesToDeadConditions = new();
         _enemiesToDie = new();
     }
 
     private void Update()
     {
-        foreach (KeyValuePair<AgentCharacter, Func<bool>[]> enemyConditionsPair in _enemiesDeadConditions)
+        foreach (KeyValuePair<AgentCharacter, Func<bool>[]> enemyConditionsPair in _enemiesToDeadConditions)
             foreach (Func<bool> condition in enemyConditionsPair.Value)
                 if (condition())
                     _enemiesToDie.Add(enemyConditionsPair.Key);
@@ -32,14 +32,14 @@ public class EnemyDieService : MonoBehaviour
         {
             foreach (AgentCharacter enemy in _enemiesToDie)
             {
-                _enemiesDeadConditions.Remove(enemy);
+                _enemiesToDeadConditions.Remove(enemy);
                 enemy.Kill();
             }
 
             _enemiesToDie.Clear();
         }
 
-        Debug.Log($"Enemy count: {_enemiesDeadConditions.Count}");
+        Debug.Log($"Enemy count: {_enemiesToDeadConditions.Count}");
     }
 
     private void OnDestroy()
@@ -47,21 +47,26 @@ public class EnemyDieService : MonoBehaviour
         _enemyFactory.OnSpawn -= OnEnemySpawn;
     }
 
-    private void OnEnemySpawn(AgentCharacter enemy, bool isDeadActive, bool isTimeLeftActive, bool isTooMuchEnemiesActive)
+    private void OnEnemySpawn(AgentCharacter enemy, DeadTypes[] deadTypes)
     {
         List<Func<bool>> deadConditions = new List<Func<bool>>();
 
-        if (isDeadActive)
-            deadConditions.Add(() => enemy.IsDead);
+        foreach (DeadTypes deadType in deadTypes)
+            switch (deadType)
+            {
+                case DeadTypes.IsDead:
+                    deadConditions.Add(() => enemy.IsDead);
+                    break;
 
-        if (isTimeLeftActive)
-            deadConditions.Add(() => enemy.Lifetime >= TimeToDie);
+                case DeadTypes.TimeLeft:
+                    deadConditions.Add(() => enemy.Lifetime >= TimeToDie);
+                    break;
 
-        if (isTooMuchEnemiesActive)
-            deadConditions.Add(() => _enemiesDeadConditions.Count > _maxEnemies);
+                case DeadTypes.TooMuchEntities:
+                    deadConditions.Add(() => _enemiesToDeadConditions.Count > _maxEnemies);
+                    break;
+            }
 
-
-        _enemiesDeadConditions.Add(enemy, deadConditions.ToArray());
+        _enemiesToDeadConditions.Add(enemy, deadConditions.ToArray());
     }
-
 }
