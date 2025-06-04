@@ -62,7 +62,7 @@ public class CharacterAnimator : MonoBehaviour
         _animator.SetLayerWeight(injuryIndex, Mathf.Lerp(currentWeight, value, step));
     }
 
-    private void OnCharacterDead(float deadDuration)
+    private void OnCharacterDead(AgentCharacter character, float deadDuration)
     {
         _animator.SetTrigger(DieKey);
         _shortEffectView.PlayIncreaseEffect(DissolveAdgeKey, deadDuration);

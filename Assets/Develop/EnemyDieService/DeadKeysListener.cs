@@ -12,7 +12,7 @@ public class DeadKeysListener : MonoBehaviour
 
     private Coroutine _listenSeveralKeysProcess;
 
-    public event Action<DeadTypes[]> KeysSelected;
+    public event Action<DeadTypes[]> DeadTypesSelected;
 
     private void Update()
     {
@@ -26,7 +26,7 @@ public class DeadKeysListener : MonoBehaviour
             StopCoroutine(_listenSeveralKeysProcess);
             _listenSeveralKeysProcess = null;
 
-            KeysSelected?.Invoke(_keysToDeadTypes.Where(keyDead => keyDead.IsActive).Select((keyDead) => keyDead.DeadType).ToArray());
+            DeadTypesSelected?.Invoke(_keysToDeadTypes.Where(keyDead => keyDead.IsActive).Select((keyDead) => keyDead.DeadType).ToArray());
 
             foreach (var keyDead in _keysToDeadTypes)
                 keyDead.IsActive = false;

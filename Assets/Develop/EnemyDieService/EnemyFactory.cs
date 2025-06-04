@@ -1,28 +1,35 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyFactory : MonoBehaviour
+public class EnemyFactory
 {
-    [SerializeField] private AgentCharacter _enemyPrefab;
-    [SerializeField] private Transform _spawnPoint;
-    [SerializeField] private DeadKeysListener _keysListener;
+    private AgentCharacter _enemyPrefab;
+    private Transform _spawnPoint;
 
-    public event Action<AgentCharacter, DeadTypes[]> OnSpawn;
+    private List<AgentCharacter> _enemies;
 
-    private void Awake()
+    public EnemyFactory(AgentCharacter enemyPrefab, Transform spawnPoint)
     {
-        _keysListener.KeysSelected += SpawnEnemy;
+        _enemyPrefab = enemyPrefab;
+        _spawnPoint = spawnPoint;
+
+        _enemies = new();
     }
 
-    private void OnDestroy()
+    public AgentCharacter SpawnEnemy()
     {
-        _keysListener.KeysSelected -= SpawnEnemy;
+        AgentCharacter enemy = UnityEngine.Object.Instantiate(_enemyPrefab, _spawnPoint);
+
+        _enemies.Add(enemy);
+
+        enemy.Dead += OnEnemyDead;
+
+        return enemy;
     }
 
-    private void SpawnEnemy(DeadTypes[] deadTypes)
+    private void OnEnemyDead(AgentCharacter enemy, float deadTime)
     {
-        AgentCharacter enemy = Instantiate(_enemyPrefab, _spawnPoint);
-
-        OnSpawn?.Invoke(enemy, deadTypes);
+        _enemies.Remove(enemy);
     }
 }

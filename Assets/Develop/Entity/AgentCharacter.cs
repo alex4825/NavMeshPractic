@@ -23,7 +23,7 @@ public class AgentCharacter : MonoBehaviour, IDamagable, IHealthable, IAgentMova
     private float _health;
     private bool _isInDesroyProcess;
 
-    public event Action<float> Dead;
+    public event Action<AgentCharacter, float> Dead;
     public event Action Hit;
 
     public bool IsAlive => Health > 0;
@@ -106,7 +106,7 @@ public class AgentCharacter : MonoBehaviour, IDamagable, IHealthable, IAgentMova
 
     public void Kill()
     {
-        Dead?.Invoke(_deadDuration);
+        Dead?.Invoke(this, _deadDuration);
         Destroy(gameObject, _deadDuration);
         _isInDesroyProcess = true;
 
